@@ -1,4 +1,5 @@
 class Tuote:
+    
     def __init__(self, id, nimi, hinta):
         self.id = id
         self.nimi = nimi

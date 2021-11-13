@@ -1,4 +1,5 @@
 class Ostoskori:
+    
     def __init__(self):
         self._tuotteet = []
     
