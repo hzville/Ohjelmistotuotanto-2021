@@ -16,13 +16,16 @@ def main():
                 player_dict['name'],
                 player_dict['team'],
                 player_dict['goals'],
-                player_dict['assists']
+                player_dict['assists'],
+                player_dict['goals'] + player_dict['assists']
             )
             players.append(player)
 
     print("Oliot:")
 
-    for player in players:
+    sorted_list = sorted(players, key=lambda player:player.total, reverse=True)
+
+    for player in sorted_list:
         print(player)
 
 if __name__ == "__main__":
