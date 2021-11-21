@@ -19,6 +19,7 @@ jobs:
       - name: Install Poetry
         run: pip install poetry
       - name: Install dependencies
+        working-directory: ./Ohjelmistotuotanto-2021/viikko3/web-login-robot/
         run: poetry install
       - name: Run robot tests
         run: bash run_robot_tests.sh
