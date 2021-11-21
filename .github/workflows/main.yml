@@ -18,13 +18,10 @@ jobs:
           python-version: 3.8
       - name: Install Poetry
         run: pip install poetry
-      - name: pwd
-        run: pwd
-      - name: ls
-        run: ls -al
       - name: Install dependencies
         working-directory: ./viikko3/web-login-robot/
         run: poetry install
       - name: Run robot tests
+        working-directory: ./viikko3/web-login-robot/
         run: bash run_robot_tests.sh
         
