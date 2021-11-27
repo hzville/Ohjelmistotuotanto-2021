@@ -123,3 +123,59 @@ class TestKauppa(unittest.TestCase):
         self.kauppa.tilimaksu("pekka", "12345")
 
         self.pankki_mock.tilisiirto.assert_called_with('pekka', 42, '12345', '33333-44455', 5)
+
+    def test_aloita_asiointi_nolla(self):
+
+        def varasto_saldo(tuote_id):
+            if tuote_id == 1:
+                return 10
+            if tuote_id == 2:
+                return 3
+        
+        def varasto_hae_tuote(tuote_id):
+            if tuote_id == 1:
+                return Tuote(1, "maito", 5)
+            if tuote_id == 2:
+                return Tuote(2, "leipä", 2)
+        
+        self.varasto_mock.saldo.side_effect = varasto_saldo
+        self.varasto_mock.hae_tuote.side_effect = varasto_hae_tuote
+        
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(1)
+        self.kauppa.tilimaksu('jussi', '3333')
+        self.pankki_mock.tilisiirto.assert_called_with('jussi', 42, '3333', '33333-44455', 5)
+
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(2)
+        self.kauppa.tilimaksu('anssi', '444')
+        self.pankki_mock.tilisiirto.assert_called_with('anssi', 42, '444', '33333-44455', 2)
+
+    def test_viitenumero_perakkaisilla(self):
+        
+        self.viitegeneraattori_mock.uusi.side_effect = [1,2]
+
+        def varasto_saldo(tuote_id):
+            if tuote_id == 1:
+                return 10
+            if tuote_id == 2:
+                return 3
+        
+        def varasto_hae_tuote(tuote_id):
+            if tuote_id == 1:
+                return Tuote(1, "maito", 5)
+            if tuote_id == 2:
+                return Tuote(2, "leipä", 2)
+        
+        self.varasto_mock.saldo.side_effect = varasto_saldo
+        self.varasto_mock.hae_tuote.side_effect = varasto_hae_tuote
+        
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(1)
+        self.kauppa.tilimaksu('jussi', '3333')
+        self.pankki_mock.tilisiirto.assert_called_with('jussi', 1, '3333', '33333-44455', 5)
+
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(2)
+        self.kauppa.tilimaksu('anssi', '444')
+        self.pankki_mock.tilisiirto.assert_called_with('anssi', 2, '444', '33333-44455', 2)
