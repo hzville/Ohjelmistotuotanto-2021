@@ -27,8 +27,9 @@ class Ostoskori:
             self.lista_ostoksista.append(Ostos(lisattava))
         else:
             for ostos in self.lista_ostoksista:
-                if ostos.tuotteen_nimi == lisattava.nimi:
+                if ostos.tuotteen_nimi() == lisattava.nimi():
                     ostos.muuta_lukumaaraa(1)
+                    return
             else:
                 self.lista_ostoksista.append(Ostos(lisattava))
 
